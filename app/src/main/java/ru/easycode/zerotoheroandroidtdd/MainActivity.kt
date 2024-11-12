@@ -21,11 +21,11 @@ class MainActivity : AppCompatActivity() {
         uiState = count.initial(countTextView.text.toString())
         uiState.apply(countTextView, incButton, decButton)
         incButton.setOnClickListener {
-            count.increment(countTextView.text.toString())
+            uiState = count.increment(countTextView.text.toString())
             uiState.apply(countTextView, incButton, decButton)
         }
         decButton.setOnClickListener {
-            count.decrement(countTextView.text.toString())
+            uiState = count.decrement(countTextView.text.toString())
             uiState.apply(countTextView, incButton, decButton)
         }
     }
@@ -37,9 +37,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        uiState = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU)
+        uiState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
             savedInstanceState.getSerializable("state", UiState::class.java) as UiState
         else
             savedInstanceState.getSerializable("state") as UiState
+        uiState.apply(countTextView, incButton, decButton)
     }
 }
