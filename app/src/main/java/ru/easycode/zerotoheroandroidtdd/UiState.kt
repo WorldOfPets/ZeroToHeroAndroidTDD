@@ -1,7 +1,24 @@
 package ru.easycode.zerotoheroandroidtdd
 
-interface UiState {
+import android.view.View
+import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
 
-    object ShowProgress:UiState{}
-    object ShowData:UiState{}
+interface UiState {
+    fun apply(button: Button, progressBar: ProgressBar, textView: TextView)
+
+    object ShowProgress:UiState{
+        override fun apply(button: Button, progressBar: ProgressBar, textView: TextView) {
+            button.isEnabled = false
+            progressBar.visibility = View.VISIBLE
+        }
+    }
+    object ShowData:UiState{
+        override fun apply(button: Button, progressBar: ProgressBar, textView: TextView) {
+            button.isEnabled = true
+            progressBar.visibility = View.GONE
+            textView.visibility = View.VISIBLE
+        }
+    }
 }

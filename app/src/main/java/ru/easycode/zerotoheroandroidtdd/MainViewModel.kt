@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -16,14 +17,13 @@ class MainViewModel(private val liveDataWrapper:LiveDataWrapper, private val rep
     private var _uiState:MutableLiveData<UiState> = MutableLiveData()
     val uiState:LiveData<UiState> = _uiState
 
+    private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    fun liveData() = liveDataWrapper.liveData()
     fun load(){
         liveDataWrapper.update(UiState.ShowProgress)
-        liveDataWrapper.update(UiState.ShowData)
         CoroutineScope(Dispatchers.Main).launch {
             repository.load()
-            _uiState.value = liveDataWrapper.liveData().value
-            delay(500)
-            _uiState.value = liveDataWrapper.liveData().value
+            liveDataWrapper.update(UiState.ShowData)
         }
     }
 }

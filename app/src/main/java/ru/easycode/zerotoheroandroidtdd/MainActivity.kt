@@ -22,18 +22,9 @@ class MainActivity : AppCompatActivity() {
 
         loadButton.setOnClickListener {
             viewModel.load()
-            viewModel.uiState.observe(this){
-                if(it != null){
-                    if (it.equals(UiState.ShowProgress)){
-                        progressBar.visibility = View.VISIBLE
-                        loadButton.isEnabled = false
-                    }else if (it.equals(UiState.ShowData)){
-                        progressBar.visibility = View.GONE
-                        loadButton.isEnabled = true
-                        titleTextView.visibility = View.VISIBLE
-                    }
-                }
-            }
+        }
+        viewModel.liveData().observe(this){uiState ->
+            uiState.apply(loadButton, progressBar, titleTextView)
         }
     }
 }
