@@ -12,10 +12,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var titleTextView:TextView
     private lateinit var progressBar:ProgressBar
     private lateinit var loadButton:Button
-    private var viewModel: MainViewModel = MainViewModel(LiveDataWrapper.Base(), Repository.Base())
+    private lateinit var viewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        viewModel = (applicationContext as MyApp).viewModel
         titleTextView = findViewById(R.id.titleTextView)
         progressBar = findViewById(R.id.progressBar)
         loadButton = findViewById(R.id.actionButton)
