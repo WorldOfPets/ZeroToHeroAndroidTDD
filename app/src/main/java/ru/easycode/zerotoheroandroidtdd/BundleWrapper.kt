@@ -14,14 +14,16 @@ interface BundleWrapper {
     class Base(
         private val bundle:Bundle
     ):Mutable{
-        private var _uiState = SingleLiveEvent<UiState>()
+        companion object{
+            const val KEY = "uiState"
+        }
         override fun save(uiState: UiState) {
-            bundle.putSerializable("uiSate", uiState)
+            bundle.putSerializable(KEY, uiState)
         }
 
         override fun restore(): UiState {
-            return bundle.getSerializable("uiState", UiState::class.java) as UiState
+            return bundle.getSerializable(KEY, UiState::class.java) as UiState
         }
-
     }
+
 }
